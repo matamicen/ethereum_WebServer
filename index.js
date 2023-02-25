@@ -437,6 +437,59 @@ const abi = [
 		"type": "function"
 	}
 ]
+
+const abi_operator = [
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "deposit",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "retrieveTokens",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "my_erc20_address",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "balances",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
 // var encodeObj = require('algosdk')
 // import algosdk, { encodeObj } from 'algosdk';
 
@@ -655,7 +708,10 @@ const contract_call = async() => {
   try {
 // replace with your own contract address and ABI
 // const contractAddress = '0xb7AA6d7Ce97f564111d029e891bA6bfC23eA6A9c';
-const contractAddress = '0x85fF8Ba96744333971fF3bE09634392AD76d3c44';
+// const contractAddress = '0x85fF8Ba96744333971fF3bE09634392AD76d3c44';
+// const contractAddress = '0xE4662C49D16BfA4F9e6c5AEfd4073f524e429726';
+const contractAddress = '0xDc5842E13D5610477cD5708fd42C4e7F81D39F4c';
+
 
 // create a provider instance
 const provider = new ethers.providers.JsonRpcProvider('https://goerli.infura.io/v3/fb7024fb51b446d1b3bb28564e980aba');
@@ -760,7 +816,8 @@ const contract_mint = async() => {
 // replace with your own contract address and ABI
 // const contractAddress = '0x1b339773C4b4D592Ab0A00f52CA69F4353E8eD06';
 // const contractAddress = '0xb7AA6d7Ce97f564111d029e891bA6bfC23eA6A9c';
-const contractAddress = '0x85fF8Ba96744333971fF3bE09634392AD76d3c44';
+// const contractAddress = '0x85fF8Ba96744333971fF3bE09634392AD76d3c44';
+const contractAddress = '0xE4662C49D16BfA4F9e6c5AEfd4073f524e429726';
 
 // replace with your own private key
 // 0x58025975E033E91EA99408f847a503044306A652
@@ -814,12 +871,17 @@ const contract_burn = async() => {
   // replace with your own contract address and ABI
   // const contractAddress = '0x1b339773C4b4D592Ab0A00f52CA69F4353E8eD06';
 //   const contractAddress = '0xb7AA6d7Ce97f564111d029e891bA6bfC23eA6A9c';
-     const contractAddress = '0x85fF8Ba96744333971fF3bE09634392AD76d3c44';
+    //  const contractAddress = '0x85fF8Ba96744333971fF3bE09634392AD76d3c44';
+	 const contractAddress = '0xDc5842E13D5610477cD5708fd42C4e7F81D39F4c';
+	
+
+
   
 
   // replace with your own private key
 //   const privateKey = '731b0d8cea4f74d858bc8b0ff5e6a0639eac146ba10a5d07609a65cbfd2539ce';
-  const privateKey ='7ed5506f9b421a0ca6c771a2600d2abc46bb2b4510aa8270a2d055d850eeeff3';
+//   const privateKey ='7ed5506f9b421a0ca6c771a2600d2abc46bb2b4510aa8270a2d055d850eeeff3';
+const privateKey ='a3180bffc5b3acdc2f8b59b687319b231a62293e577e30669b5aaee2afcfb220';
   
   
   // create a provider instance
@@ -859,15 +921,134 @@ const contract_burn = async() => {
   }
   }
 
+  const myErc20_approve = async() => {
+	try {
+  
+     //este es el erc20 que voy a autorizar para que el contrato operador me lo pueda tomat de mi billetera y transferir
+	 const contractAddress = '0xDc5842E13D5610477cD5708fd42C4e7F81D39F4c';
+	
 
+
+	//  Matias1
+	//  0x58025975E033E91EA99408f847a503044306A652
+	//  private key:  731b0d8cea4f74d858bc8b0ff5e6a0639eac146ba10a5d07609a65cbfd2539ce
+	 
+	//  Matias2
+	//  0x5970Aa08a6A5607635eCCB783867021676bb2759
+	//  private key: 7ed5506f9b421a0ca6c771a2600d2abc46bb2b4510aa8270a2d055d850eeeff3
+	 
+	//  Matias3
+	//  0x46d98486B8474fc7aD3BC8FEFe6053Ee50b3cE06
+	//  private key: a3180bffc5b3acdc2f8b59b687319b231a62293e577e30669b5aaee2afcfb220
+
+  // replace with your own private key
+// esta es la firma de la billetera que autoriza a retirar los tokens de arriba 
+const privateKey ='a3180bffc5b3acdc2f8b59b687319b231a62293e577e30669b5aaee2afcfb220';
+  
+  
+  // create a provider instance
+  // const provider = new ethers.providers.JsonRpcProvider('https://goerli.infura.io/v3/fb7024fb51b446d1b3bb28564e980aba');
+  const provider = new ethers.providers.WebSocketProvider(
+	`wss://goerli.infura.io/ws/v3/fb7024fb51b446d1b3bb28564e980aba`
+  );
+  
+  // create a wallet instance
+  const wallet = new ethers.Wallet(privateKey, provider);
+  
+  // create a contract instance
+  const contract = new ethers.Contract(contractAddress, abi, wallet);
+  
+
+  // en este caso autoriza un maximo de 5 tokens para poder ser transferidos a traves del contrato que estoy autorizando
+  const amount = ethers.utils.parseEther('5'); // 
+  
+  console.log('amount:' + amount);
+  
+  // ese es el contrato operador al cual le doy autorizacion para que use el token de arriba, a esto sumandole la firma
+  // hace que el contrato operador pueda retirar el token de arriba de la billetera firmante
+  my_operator_address = '0x5F5E7b1b17E9132b8b20e12D65Cf2141Be3578ed';
+  await contract.approve(my_operator_address,amount)
+ 	.then(transaction => console.log('aprove transaction hash:', transaction.hash))
+	.catch(error => console.error('Error calling burn:', error));
+  
+  
+  } catch (err) {
+	console.error(err);
+  }
+  }
+
+  const myOperator_deposit = async() => {
+	try {
+  // replace with your own contract address and ABI
+     //operator address
+	 const contractAddress = '0x5F5E7b1b17E9132b8b20e12D65Cf2141Be3578ed';
+	
+
+
+	//  Matias1
+	//  0x58025975E033E91EA99408f847a503044306A652
+	//  private key:  731b0d8cea4f74d858bc8b0ff5e6a0639eac146ba10a5d07609a65cbfd2539ce
+	 
+	//  Matias2
+	//  0x5970Aa08a6A5607635eCCB783867021676bb2759
+	//  private key: 7ed5506f9b421a0ca6c771a2600d2abc46bb2b4510aa8270a2d055d850eeeff3
+	 
+	//  Matias3
+	//  0x46d98486B8474fc7aD3BC8FEFe6053Ee50b3cE06
+	//  private key: a3180bffc5b3acdc2f8b59b687319b231a62293e577e30669b5aaee2afcfb220
+
+  // replace with your own private key
+
+const privateKey ='a3180bffc5b3acdc2f8b59b687319b231a62293e577e30669b5aaee2afcfb220';
+  
+  
+  // create a provider instance
+  // const provider = new ethers.providers.JsonRpcProvider('https://goerli.infura.io/v3/fb7024fb51b446d1b3bb28564e980aba');
+  const provider = new ethers.providers.WebSocketProvider(
+	`wss://goerli.infura.io/ws/v3/fb7024fb51b446d1b3bb28564e980aba`
+  );
+  
+  // create a wallet instance
+  const wallet = new ethers.Wallet(privateKey, provider);
+  
+  // create a contract instance
+  const contract = new ethers.Contract(contractAddress, abi_operator, wallet);
+  
+  // replace with the address you want to mint to and the amount to mint
+  const toAddress = '0x46d98486B8474fc7aD3BC8FEFe6053Ee50b3cE06';
+  const amount = ethers.utils.parseEther('5'); // burn 50 tokens
+  
+  console.log('amount:' + amount);
+  
+	// listen for the NewUserRegistered event
+	// contract.on('NewBurn', (user, timestamp) => {
+	//   console.log('New burn registered:', user, 'at', new Date(timestamp * 1000));
+	// });
+  
+  // call the burn function
+  
+//   await contract.burn(toAddress, amount)
+// 	.then(transaction => console.log('burn transaction hash:', transaction.hash))
+// 	.catch(error => console.error('Error calling burn:', error));
+  await contract.deposit(amount)
+ 	.then(transaction => console.log('depoist transaction hash:', transaction.hash))
+	.catch(error => console.error('Error calling burn:', error));
+  
+  
+  } catch (err) {
+	console.error(err);
+  }
+  }
 
 
 // startListen()
 //  test()
 //  eth_balance()
 // contract_call()
-contract_mint()
+// contract_mint()
 // send_eth()
 // contract_burn()
 // contract_withdraw_to_owner()
+myOperator_deposit()
+// myErc20_approve()
 
